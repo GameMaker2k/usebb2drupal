@@ -13,16 +13,17 @@ use Drupal\migrate\Row;
  *   id = "usebb_post_edit_time"
  * )
  */
-class PostEditTime extends ProcessPluginBase {
-
-  /**
-   * {@inheritdoc}
-   */
-  public function transform($value, MigrateExecutableInterface $migrate_executable, Row $row, $destination_property) {
-    if (empty($value) && $row->hasSourceProperty('post_time')) {
-      $value = $row->getSourceProperty('post_time');
+class PostEditTime extends ProcessPluginBase
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function transform($value, MigrateExecutableInterface $migrate_executable, Row $row, $destination_property)
+    {
+        if (empty($value) && $row->hasSourceProperty('post_time')) {
+            $value = $row->getSourceProperty('post_time');
+        }
+        return $value;
     }
-    return $value;
-  }
 
 }

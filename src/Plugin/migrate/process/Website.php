@@ -13,21 +13,22 @@ use Drupal\migrate\Row;
  *   id = "usebb_website"
  * )
  */
-class Website extends ProcessPluginBase {
-
-  /**
-   * {@inheritdoc}
-   */
-  public function transform($value, MigrateExecutableInterface $migrate_executable, Row $row, $destination_property) {
-    if (!($url = parse_url($value)) || empty($url['host'])) {
-      return NULL;
+class Website extends ProcessPluginBase
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function transform($value, MigrateExecutableInterface $migrate_executable, Row $row, $destination_property)
+    {
+        if (!($url = parse_url($value)) || empty($url['host'])) {
+            return null;
+        }
+        $host = $url['host'];
+        return [
+          'uri' => $value,
+          'title' => strpos($host, 'www.') === 0 ? substr($host, 4) : $host,
+          'options' => [],
+        ];
     }
-    $host = $url['host'];
-    return [
-      'uri' => $value,
-      'title' => strpos($host, 'www.') === 0 ? substr($host, 4) : $host,
-      'options' => [],
-    ];
-  }
 
 }

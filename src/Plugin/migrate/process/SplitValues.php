@@ -13,15 +13,16 @@ use Drupal\migrate\Row;
  *   id = "usebb_split_values"
  * )
  */
-class SplitValues extends ProcessPluginBase {
-
-  /**
-   * {@inheritdoc}
-   */
-  public function transform($value, MigrateExecutableInterface $migrate_executable, Row $row, $destination_property) {
-    return array_map(function($value) {
-      return ['value' => trim($value)];
-    }, preg_split('#\s*,\s*#', $value));
-  }
+class SplitValues extends ProcessPluginBase
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function transform($value, MigrateExecutableInterface $migrate_executable, Row $row, $destination_property)
+    {
+        return array_map(function ($value) {
+            return ['value' => trim($value)];
+        }, preg_split('#\s*,\s*#', $value));
+    }
 
 }

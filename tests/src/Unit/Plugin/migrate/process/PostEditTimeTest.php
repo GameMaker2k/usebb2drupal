@@ -10,52 +10,56 @@ use Drupal\Tests\migrate\Unit\process\MigrateProcessTestCase;
  *
  * @group usebb2drupal
  */
-class PostEditTimeTest extends MigrateProcessTestCase {
+class PostEditTimeTest extends MigrateProcessTestCase
+{
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->plugin = new PostEditTime([], 'usebb_post_edit_time', []);
+    }
 
-  /**
-   * {@inheritdoc}
-   */
-  protected function setUp() {
-    parent::setUp();
-    $this->plugin = new PostEditTime([], 'usebb_post_edit_time', []);
-  }
+    /**
+     * Test return of passed edit time value and ignoring of post time.
+     */
+    public function testPostEditTime()
+    {
+        $this->row->method('hasSourceProperty')->will($this->returnValueMap([
+          ['post_time', true],
+        ]));
+        $this->row->method('getSourceProperty')->will($this->returnValueMap([
+          ['post_time', '1449319993'],
+        ]));
 
-  /**
-   * Test return of passed edit time value and ignoring of post time.
-   */
-  public function testPostEditTime() {
-    $this->row->method('hasSourceProperty')->will($this->returnValueMap([
-      ['post_time', TRUE],
-    ]));
-    $this->row->method('getSourceProperty')->will($this->returnValueMap([
-      ['post_time', '1449319993'],
-    ]));
+        $value = $this->plugin->transform('1449319413', $this->migrateExecutable, $this->row, 'destinationproperty');
+        $this->assertEquals('1449319413', $value);
+    }
 
-    $value = $this->plugin->transform('1449319413', $this->migrateExecutable, $this->row, 'destinationproperty');
-    $this->assertEquals('1449319413', $value);
-  }
+    /**
+     * Test return of empty edit time value.
+     */
+    public function testEmptyPostEditTime()
+    {
+        $value = $this->plugin->transform(null, $this->migrateExecutable, $this->row, 'destinationproperty');
+        $this->assertEquals(null, $value);
+    }
 
-  /**
-   * Test return of empty edit time value.
-   */
-  public function testEmptyPostEditTime() {
-    $value = $this->plugin->transform(NULL, $this->migrateExecutable, $this->row, 'destinationproperty');
-    $this->assertEquals(NULL, $value);
-  }
+    /**
+     * Test return of post_time for empty edit time value.
+     */
+    public function testPostTimeEditTime()
+    {
+        $this->row->method('hasSourceProperty')->will($this->returnValueMap([
+          ['post_time', true],
+        ]));
+        $this->row->method('getSourceProperty')->will($this->returnValueMap([
+          ['post_time', '1449319993'],
+        ]));
 
-  /**
-   * Test return of post_time for empty edit time value.
-   */
-  public function testPostTimeEditTime() {
-    $this->row->method('hasSourceProperty')->will($this->returnValueMap([
-      ['post_time', TRUE],
-    ]));
-    $this->row->method('getSourceProperty')->will($this->returnValueMap([
-      ['post_time', '1449319993'],
-    ]));
-
-    $value = $this->plugin->transform(NULL, $this->migrateExecutable, $this->row, 'destinationproperty');
-    $this->assertEquals('1449319993', $value);
-  }
+        $value = $this->plugin->transform(null, $this->migrateExecutable, $this->row, 'destinationproperty');
+        $this->assertEquals('1449319993', $value);
+    }
 
 }
